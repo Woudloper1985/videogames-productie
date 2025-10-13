@@ -29,6 +29,7 @@ public class Game {
             name = "consolesgames",
             joinColumns = @JoinColumn(name = "gameId"),
             inverseJoinColumns = @JoinColumn(name = "consoleId"))
+    @OrderBy("name")
     private Set<Console> consoles;
 
     public Game(String title, String developer, LocalDate releaseDate, Set<Genre> genres, Set<Console> consoles) {
@@ -85,7 +86,7 @@ public class Game {
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Game game)) return false;
-        return Objects.equals(getTitle(), game.getTitle());
+        return Objects.equals(getTitle(), game.getTitle()); //unieke constraint in db.
     }
 
     @Override
