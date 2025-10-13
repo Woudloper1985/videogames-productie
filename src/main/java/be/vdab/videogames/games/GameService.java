@@ -1,5 +1,6 @@
 package be.vdab.videogames.games;
 
+import be.vdab.videogames.consoles.Console;
 import be.vdab.videogames.consoles.ConsoleNietGevondenException;
 import be.vdab.videogames.consoles.ConsoleRepository;
 import org.springframework.data.domain.Sort;
@@ -8,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
@@ -86,9 +89,26 @@ class GameService {
     }
 
     @Transactional
-    Game create(Game game) { // zal DTO NieuweGame met validatielogica moeten worden
+    public Game create(NieuweGame nieuweGame) {
+        // Consoles ophalen via IDs
+        Set<Console> consoles = nieuweGame.consoleIds().stream()
+                .map(id -> consoleRepository.findById(id)
+                        .orElseThrow(ConsoleNietGevondenException::new))
+                .collect(Collectors.toSet());
+
+        // Game entity aanmaken
+        Game game = new Game(
+                nieuweGame.title(),
+                nieuweGame.developer(),
+                nieuweGame.releaseDate(),
+                nieuweGame.genres(),
+                consoles
+        );
+
+        // Opslaan in DB
         return gameRepository.save(game);
     }
+
 
     @Transactional
     void delete(Long id) {
