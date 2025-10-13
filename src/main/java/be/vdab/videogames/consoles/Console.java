@@ -63,7 +63,7 @@ public class Console {
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Console console)) return false;
-        return Objects.equals(getName(), console.getName());
+        return Objects.equals(getName(), console.getName()); //unieke constraint in db.
     }
 
     @Override
