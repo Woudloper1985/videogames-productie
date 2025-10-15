@@ -10,19 +10,17 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
+@Table(name = "games")
 public class Game {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String title;
     private String developer;
     private LocalDate releaseDate;
-    @ElementCollection(targetClass = Genre.class)
     @Enumerated(EnumType.STRING)
-    @CollectionTable(name = "gamegenres", joinColumns = @JoinColumn(name = "gameId"))
-    @Column(name = "genre")
-    private Set<Genre> genres = new LinkedHashSet<>();
+    @Column(nullable = false)
+    private Genre genre;
 
     @ManyToMany
     @JoinTable(
@@ -32,11 +30,11 @@ public class Game {
     @OrderBy("name")
     private Set<Console> consoles;
 
-    public Game(String title, String developer, LocalDate releaseDate, Set<Genre> genres, Set<Console> consoles) {
+    public Game(String title, String developer, LocalDate releaseDate, Genre genre, Set<Console> consoles) {
         this.title = title;
         this.developer = developer;
         this.releaseDate = releaseDate;
-        this.genres = new LinkedHashSet<>(genres);
+        this.genre = genre;
         this.consoles = new LinkedHashSet<>(consoles);
     }
 
@@ -59,20 +57,12 @@ public class Game {
         return releaseDate;
     }
 
-    public Set<Genre> getGenres() {
-        return Collections.unmodifiableSet(genres);
+    public Genre getGenre() {
+        return genre;
     }
 
     public Set<Console> getConsoles() {
         return Collections.unmodifiableSet(consoles);
-    }
-
-    public void addGenre(Genre genre) {
-        genres.add(genre);
-    }
-
-    public void removeGenre(Genre genre) {
-        genres.remove(genre);
     }
 
     public void addConsole(Console console) {

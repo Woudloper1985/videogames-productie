@@ -1,24 +1,20 @@
 package be.vdab.videogames.consoles;
 
 
-import be.vdab.videogames.games.Game;
-import be.vdab.videogames.games.GameNietGevondenException;
-import be.vdab.videogames.games.GameRepository;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
 class ConsoleService {
     private final ConsoleRepository consoleRepository;
-    private final GameRepository gameRepository;
 
-    ConsoleService(ConsoleRepository consoleRepository, GameRepository gameRepository) {
+    ConsoleService(ConsoleRepository consoleRepository) {
         this.consoleRepository = consoleRepository;
-        this.gameRepository = gameRepository;
     }
 
     //voor overzichtslijst in frontend.
@@ -26,13 +22,20 @@ class ConsoleService {
         return consoleRepository.findAll(Sort.by("name"));
     }
 
-    Console findById(Long id) {
-        return consoleRepository.findById(id)
-                .orElseThrow(ConsoleNietGevondenException::new);
+    Optional<Console> findById(Long id) {
+        return consoleRepository.findById(id);
     }
 
     @Transactional
-    Console create(Console console) { // zal DTO NieuweConsole met validatielogica moeten worden
+    Console create(NieuweConsole nieuweConsole) {
+        if (consoleRepository.existsByName(nieuweConsole.name())) {
+            throw new ConsoleBestaatAlException();
+        } // ok bij slechts één admin; geen race conditions.
+        Console console = new Console(
+                nieuweConsole.name(),
+                nieuweConsole.manufacturer(),
+                nieuweConsole.releaseYear()
+        );
         return consoleRepository.save(console);
     }
 
@@ -43,24 +46,4 @@ class ConsoleService {
 
     //wijzigingslogica kan eventueel later nog --> dan moet optimistic locking samen met een versie-kolom etc.
     //kan ik misschien in deze beperkte scope houden op: delete en dan nieuw maken.
-
-    @Transactional
-    void addGameToConsole(long consoleId, long gameId) {
-        Console console = consoleRepository.findById(consoleId)
-                .orElseThrow(ConsoleNietGevondenException::new);
-        Game game = gameRepository.findById(gameId)
-                .orElseThrow(GameNietGevondenException::new);
-        console.addGame(game);
-    }
-
-    @Transactional
-    void removeGameFromConsole(long consoleId, long gameId) {
-        Console console = consoleRepository.findById(consoleId)
-                .orElseThrow(ConsoleNietGevondenException::new);
-        Game game = gameRepository.findById(gameId)
-                .orElseThrow(GameNietGevondenException::new);
-        console.removeGame(game);
-    }
-
-
 }

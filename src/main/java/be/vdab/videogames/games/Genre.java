@@ -1,6 +1,10 @@
 package be.vdab.videogames.games;
 
-enum Genre {
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+
+public enum Genre {
     ACTION,
     ADVENTURE,
     METROIDVANIA,
@@ -11,5 +15,11 @@ enum Genre {
     SHOOTER,
     SOULSLIKE,
     SPORTS,
-    STRATEGY
+    STRATEGY;
+
+    public static List<Genre> sortedValues() {
+        return Arrays.stream(values())
+                .sorted(Comparator.comparing(Enum::name))
+                .toList();
+    }
 }
