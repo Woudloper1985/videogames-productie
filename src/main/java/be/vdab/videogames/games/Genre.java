@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
-public enum Genre {
+enum Genre {
     ACTION,
     ADVENTURE,
     METROIDVANIA,

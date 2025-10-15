@@ -5,7 +5,7 @@ import jakarta.validation.constraints.*;
 import java.time.LocalDate;
 import java.util.Set;
 
-public record NieuweGame(
+record NieuweGame(
         @NotBlank String title,
         @NotBlank String developer,
         @NotNull @PastOrPresent LocalDate releaseDate,
