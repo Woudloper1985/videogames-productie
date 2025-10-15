@@ -9,11 +9,11 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
+@Table(name = "consoles")
 public class Console {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
     private String name;
     private String manufacturer;
     private int releaseYear;
@@ -26,6 +26,7 @@ public class Console {
         this.name = name;
         this.manufacturer = manufacturer;
         this.releaseYear = releaseYear;
+        games = new LinkedHashSet<>();
     }
 
     protected Console() {
@@ -58,7 +59,6 @@ public class Console {
     public void removeGame(Game game) {
         games.remove(game);
     }
-
 
     @Override
     public boolean equals(Object o) {

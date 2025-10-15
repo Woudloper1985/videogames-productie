@@ -10,6 +10,6 @@ public record NieuweGame(
         @NotBlank String developer,
         @NotNull @PastOrPresent LocalDate releaseDate,
         @NotEmpty Set<@Positive Long> consoleIds, // minstens één console verplicht
-        @NotEmpty Set<Genre> genres      // minstens één genre verplicht
+        @NotNull Genre genre //genre verplicht in te voeren
 ) {
 }

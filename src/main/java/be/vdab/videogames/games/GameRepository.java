@@ -1,5 +1,6 @@
 package be.vdab.videogames.games;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -8,17 +9,15 @@ import java.util.Optional;
 
 public interface GameRepository extends JpaRepository<Game, Long> {
 
-//    @Override
-//    @EntityGraph(attributePaths = "genres")
-//    List<Game> findAll();
-
     @Override
-    @EntityGraph(attributePaths = "genres")
+    @EntityGraph(attributePaths = "consoles")
     Optional<Game> findById(Long id);
 
-    List<Game> findByGenresContaining(Genre genre);
+    @EntityGraph(attributePaths = "consoles")
+    List<Game> findByTitleContainingIgnoreCase(String title, Sort by);
 
-    List<Game> findByTitleContainingIgnoreCase(String title);
+    @EntityGraph(attributePaths = "consoles")
+    List<Game> findByGenre(Genre genre, Sort by);
 
     List<Game> findByConsolesId(Long consoleId);
 }
