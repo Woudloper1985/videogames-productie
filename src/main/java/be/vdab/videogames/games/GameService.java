@@ -55,6 +55,9 @@ class GameService {
 
     @Transactional
     Game create(NieuweGame nieuweGame) {
+        if (gameRepository.existsByTitle(nieuweGame.title())) {
+            throw new GameBestaatAlException();
+        } // ok bij slechts één admin; geen race conditions.
         // Consoles ophalen via IDs
         Set<Console> consoles = nieuweGame.consoleIds().stream()
                 .map(id -> consoleRepository.findById(id)
