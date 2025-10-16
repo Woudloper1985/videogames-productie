@@ -14,7 +14,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Transactional
 @Sql("/consolesEnGames.sql")
 @AutoConfigureMockMvc
-// run de volledige klasse voor de tests OF voeg per method de environment variabelen toe in configs - dit is een probleem eigen aan IntelliJ.
 class ConsoleControllerTest {
 
     private final static String CONSOLES_TABLE = "consoles";
