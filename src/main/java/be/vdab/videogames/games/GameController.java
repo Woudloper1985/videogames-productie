@@ -18,6 +18,13 @@ class GameController {
         this.gameService = gameService;
     }
 
+    @GetMapping("aantal")
+    long findAantal() {
+        return gameService.findAantal();
+    }
+
+    //kan eventueel ook nog een findAantalByGenre(Genre genre) gemaakt worden.
+
     @GetMapping
     Stream<GameBeknopt> findAll() {
         return gameService.findAll()

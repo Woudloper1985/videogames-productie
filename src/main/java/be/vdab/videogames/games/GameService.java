@@ -26,6 +26,10 @@ class GameService {
         this.consoleRepository = consoleRepository;
     }
 
+    long findAantal() {
+        return gameRepository.count();
+    }
+
     //voor overzichtslijst in frontend.
     List<Game> findAll() {
         return gameRepository.findAll(Sort.by("title"));
