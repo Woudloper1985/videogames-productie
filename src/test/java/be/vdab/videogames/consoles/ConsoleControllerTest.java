@@ -1,14 +1,23 @@
 package be.vdab.videogames.consoles;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.assertj.MockMvcTester;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.nio.charset.StandardCharsets;
+
 import static org.assertj.core.api.Assertions.assertThat;
+
+// onderstaande tests zijn niet exhaustief; focus op non-triviale tests.
 
 @SpringBootTest
 @Transactional
@@ -16,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @AutoConfigureMockMvc
 class ConsoleControllerTest {
 
-    private final static String CONSOLES_TABLE = "consoles";
+    //private final static String CONSOLES_TABLE = "consoles";
     private final MockMvcTester mockMvcTester;
     private final JdbcClient jdbcClient;
 
@@ -25,8 +34,14 @@ class ConsoleControllerTest {
         this.jdbcClient = jdbcClient;
     }
 
-    private int idVanTest1Console() {
+    private int idVanTest1Console() { //console met 2 games
         return jdbcClient.sql("select id from consoles where name = 'TestConsole 1'")
+                .query(Integer.class)
+                .single();
+    }
+
+    private int idVanTest2Console() { //console zonder games
+        return jdbcClient.sql("select id from consoles where name = 'TestConsole 2'")
                 .query(Integer.class)
                 .single();
     }
@@ -41,7 +56,7 @@ class ConsoleControllerTest {
                 .bodyJson()
                 .satisfies(
                         json -> assertThat(json)
-                                .extractingPath("name")
+                                .extractingPath("$.name")
                                 .isEqualTo("TestConsole 1"),
                         json -> assertThat(json)
                                 .extractingPath("$.games")
@@ -53,6 +68,19 @@ class ConsoleControllerTest {
     }
 
     @Test
+    void findByIdConsoleZonderGamesGeeftLegeGamesArray() {
+        var id = idVanTest2Console();
+        var response = mockMvcTester.get()
+                .uri("/consoles/{id}", id);
+        assertThat(response)
+                .hasStatusOk()
+                .bodyJson()
+                .extractingPath("$.games")
+                .asArray()
+                .isEmpty();
+    }
+
+    @Test
     void findByIdMetOnbestaandeIdGeeft404NotFound() {
         var response = mockMvcTester.get()
                 .uri("/consoles/{id}", Long.MAX_VALUE);
@@ -60,14 +88,37 @@ class ConsoleControllerTest {
     }
 
     @Test
-    void createMetCorrecteInvoerVoegtConsoleToe() {
+    void createMetCorrecteInvoerVoegtConsoleToe() throws Exception {
+        var jsonData = new ClassPathResource("consoleCorrect.json")
+                .getContentAsString(StandardCharsets.UTF_8);
+        var response = mockMvcTester.post()
+                .uri("/consoles")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonData);
+        assertThat(response)
+                .hasStatus(HttpStatus.CREATED)
+                .bodyJson()
+                .extractingPath("$.name")
+                .isEqualTo("NieuweConsole");
     }
 
-    @Test
-    void createMetFouteInvoerGeeft400BadRequest() {
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "legeNaamConsole.json",
+            "legeManufacturerConsole.json",
+            "teOudeConsole.json",
+            "toekomstigeConsole.json"})
+    void createMetFouteInvoerGeeft400BadRequest(String fouteConsole) throws Exception {
+        var jsonData = new ClassPathResource(fouteConsole)
+                .getContentAsString(StandardCharsets.UTF_8);
+        var response = mockMvcTester.post()
+                .uri("/consoles")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonData);
+        assertThat(response).hasStatus(HttpStatus.BAD_REQUEST);
     }
 }
 
-// wordt getest in GameController --> zelfde methods:
+// worden getest in GameController, want zelfde methods daar:
 //addGameToConsole()
 //removeGameFromConsole()
