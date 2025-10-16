@@ -11,6 +11,7 @@ enum Genre {
     OTHER,
     PLATFORMER,
     RACING,
+    ROGUELIKE, //naderhand toegevoegd
     RPG,
     SHOOTER,
     SOULSLIKE,
