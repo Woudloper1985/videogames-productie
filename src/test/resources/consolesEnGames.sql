@@ -5,7 +5,7 @@ values ('TestConsole 1', 'Sony', 2020),
 insert into games(title, developer, releaseDate, genre)
 values ('TestGame 1', 'Naughty Dog', '2020-06-19', 'ACTION'),
        ('TestGame 2', '343 Industries', '2021-12-08', 'SHOOTER'),
-       ('TestGame 3', 'Nintendo', '2020-03-20', 'SOULSLIKE');
+       ('TestGame 3', 'Nintendo', '2020-03-20', 'SHOOTER');
 insert into consolesgames(gameId, consoleId)
 select g.id, c.id
 from games g, consoles c
