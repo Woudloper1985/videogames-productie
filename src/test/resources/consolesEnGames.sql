@@ -11,6 +11,6 @@ select g.id, c.id
 from games g, consoles c
 where (g.title = 'TestGame 1' and c.name = 'TestConsole 1')
    or (g.title = 'TestGame 2' and c.name = 'TestConsole 1')
-   or (g.title = 'TestGame 2' and c.name = 'TestConsole 2')
+   or (g.title = 'TestGame 2' and c.name = 'TestConsole 3')
    or (g.title = 'TestGame 3' and c.name = 'TestConsole 3')
    or (g.title = 'TestGame 1' and c.name = 'TestConsole 3'); -- TestGame 1 heb ik ook op TestConsole 3

@@ -5,6 +5,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Year;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,6 +32,10 @@ class ConsoleService {
         if (consoleRepository.existsByName(nieuweConsole.name())) {
             throw new ConsoleBestaatAlException();
         } // ok bij slechts één admin; geen race conditions.
+        int huidigJaar = Year.now().getValue(); // haalt het huidige jaar op.
+        if (nieuweConsole.releaseYear() > huidigJaar) {
+            throw new ReleaseJaarInToekomstException();
+        }
         Console console = new Console(
                 nieuweConsole.name(),
                 nieuweConsole.manufacturer(),
