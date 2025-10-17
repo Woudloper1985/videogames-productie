@@ -103,7 +103,7 @@ class GameControllerTest {
                     "genre": "RPG",
                     "consoleIds": [%d]
                 }
-                """.formatted(idVanTestConsole2()); // met meerdere consoles krijg ik malicious content error (heeft iets met parsing te maken).
+                """.formatted(idVanTestConsole2()); // met meerdere consoles krijg ik malicious content error (heeft iets met JSON parsing te maken).
         var response = mockMvcTester.post()
                 .uri("/games")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -161,7 +161,7 @@ class GameControllerTest {
                 "gameId=" + gameId + " and consoleId=" + consoleId);
         assertThat(count).isZero();
     }
-    
+
     //HELPERS:
 
     private long idVanTestGame1() {
