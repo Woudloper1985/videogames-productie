@@ -1,6 +1,5 @@
 package be.vdab.videogames.games;
 
-import jakarta.validation.constraints.NotBlank;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -20,6 +19,7 @@ interface GameRepository extends JpaRepository<Game, Long> {
     @EntityGraph(attributePaths = "consoles")
     List<Game> findByGenre(Genre genre, Sort by);
 
+    @EntityGraph(attributePaths = "consoles")
     List<Game> findByConsolesId(Long consoleId);
 
     boolean existsByTitle(String title);

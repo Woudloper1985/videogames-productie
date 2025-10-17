@@ -7,10 +7,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -62,11 +59,14 @@ class GameService {
         if (gameRepository.existsByTitle(nieuweGame.title())) {
             throw new GameBestaatAlException();
         } // ok bij slechts één admin; geen race conditions.
-        // Consoles ophalen via IDs
-        Set<Console> consoles = nieuweGame.consoleIds().stream()
-                .map(id -> consoleRepository.findById(id)
-                        .orElseThrow(ConsoleNietGevondenException::new))
-                .collect(Collectors.toSet());
+
+        // Alle consoles in één query ophalen
+        var consoles = new LinkedHashSet<>(consoleRepository.findAllById(nieuweGame.consoleIds()));
+
+        // Controleer of alle IDs bestaan
+        if (consoles.size() != nieuweGame.consoleIds().size()) {
+            throw new ConsoleNietGevondenException();
+        }
         // Game entity aanmaken
         Game game = new Game(
                 nieuweGame.title(),
