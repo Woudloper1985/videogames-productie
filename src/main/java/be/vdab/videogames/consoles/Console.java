@@ -32,8 +32,6 @@ public class Console {
     protected Console() {
     }
 
-    // test branch 1-2
-
     public long getId() {
         return id;
     }
