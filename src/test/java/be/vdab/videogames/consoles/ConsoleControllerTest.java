@@ -17,7 +17,7 @@ import java.nio.charset.StandardCharsets;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-// onderstaande tests zijn niet exhaustief; focus op non-triviale tests.
+// onderstaande tests zijn niet exhaustief + focus op non-triviale tests.
 
 @SpringBootTest
 @Transactional
@@ -32,18 +32,6 @@ class ConsoleControllerTest {
     ConsoleControllerTest(MockMvcTester mockMvcTester, JdbcClient jdbcClient) {
         this.mockMvcTester = mockMvcTester;
         this.jdbcClient = jdbcClient;
-    }
-
-    private int idVanTest1Console() { //console met 2 games
-        return jdbcClient.sql("select id from consoles where name = 'TestConsole 1'")
-                .query(Integer.class)
-                .single();
-    }
-
-    private int idVanTest2Console() { //console zonder games
-        return jdbcClient.sql("select id from consoles where name = 'TestConsole 2'")
-                .query(Integer.class)
-                .single();
     }
 
     @Test
@@ -116,6 +104,20 @@ class ConsoleControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonData);
         assertThat(response).hasStatus(HttpStatus.BAD_REQUEST);
+    }
+
+    //HELPERS:
+
+    private int idVanTest1Console() { //console met 2 games
+        return jdbcClient.sql("select id from consoles where name = 'TestConsole 1'")
+                .query(Integer.class)
+                .single();
+    }
+
+    private int idVanTest2Console() { //console zonder games
+        return jdbcClient.sql("select id from consoles where name = 'TestConsole 2'")
+                .query(Integer.class)
+                .single();
     }
 }
 

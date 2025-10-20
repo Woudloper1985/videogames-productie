@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-// onderstaande tests zijn niet exhaustief; focus op non-triviale tests.
+// onderstaande tests zijn niet exhaustief + focus op non-triviale tests.
 
 @SpringBootTest
 @Transactional
@@ -61,7 +61,7 @@ class GameControllerTest {
     }
 
     @Test
-    void findByTitleContainingIgnoreCaseGeeftCorrecteGames() {
+    void findByTitleContainingIgnoreCaseGeeftJuisteGames() {
         var response = mockMvcTester.get()
                 .uri("/games?title=TeStGA");
         assertThat(response)
@@ -72,7 +72,7 @@ class GameControllerTest {
     }
 
     @Test
-    void findByGenreGeeftCorrecteGames() {
+    void findByGenreGeeftJuisteGames() {
         var response = mockMvcTester.get()
                 .uri("/games/genre/SHOOTER");
         assertThat(response)
@@ -94,7 +94,7 @@ class GameControllerTest {
     }
 
     @Test
-    void createGeeftCorrecteGame() {
+    void createWerkt() {
         var jsonBody = """
                 {
                     "title": "Nieuwe Game",
@@ -139,7 +139,7 @@ class GameControllerTest {
         assertThat(response).hasStatusOk();
         entityManager.flush();
 
-        // Controleer dat er een record in de tussentabel is gekomen
+        // Controleer dat er een record in de tussentabel is gekomen:
         var count = JdbcTestUtils.countRowsInTableWhere(jdbcClient, "consolesgames",
                 "gameId=" + gameId + " and consoleId=" + consoleId);
         assertThat(count).isEqualTo(1);
@@ -156,7 +156,7 @@ class GameControllerTest {
         assertThat(response).hasStatusOk();
         entityManager.flush();
 
-        // Controleer dat het record uit de tussentabel verdwenen is
+        // Controleer dat het record uit de tussentabel verdwenen is:
         var count = JdbcTestUtils.countRowsInTableWhere(jdbcClient, "consolesgames",
                 "gameId=" + gameId + " and consoleId=" + consoleId);
         assertThat(count).isZero();
@@ -199,5 +199,4 @@ class GameControllerTest {
                 .query(Long.class)
                 .single();
     }
-
 }
