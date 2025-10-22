@@ -82,16 +82,16 @@ class GameControllerTest {
                 .isEqualTo(JdbcTestUtils.countRowsInTableWhere(jdbcClient, GAMES_TABLE, "genre = 'SHOOTER'"));
     }
 
-    @Test
-    void findByConsoleIdGeeftJuisteGames() {
-        var response = mockMvcTester.get()
-                .uri("/games/opConsole/{consoleId}", idVanTestConsole1());
-        assertThat(response)
-                .hasStatusOk()
-                .bodyJson()
-                .extractingPath("$.length()")
-                .isEqualTo(2);
-    }
+//    @Test
+//    void findByConsoleIdGeeftJuisteGames() {
+//        var response = mockMvcTester.get()
+//                .uri("/games/opConsole/{consoleId}", idVanTestConsole1());
+//        assertThat(response)
+//                .hasStatusOk()
+//                .bodyJson()
+//                .extractingPath("$.length()")
+//                .isEqualTo(2);
+//    }
 
     @Test
     void createWerkt() {

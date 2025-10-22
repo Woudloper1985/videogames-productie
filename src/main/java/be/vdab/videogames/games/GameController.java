@@ -42,10 +42,10 @@ class GameController {
 
     // lege invoer (400) in frontend afvangen, evenals niets gevonden (200 met lege lijst)
     @GetMapping(params = "title")
-    List<GameMetConsoles> findByTitleContainingIgnoreCase(@NotBlank String title) {
+    List<GameBeknopt> findByTitleContainingIgnoreCase(@NotBlank String title) {
         return gameService.findByTitleContainingIgnoreCase(title)
                 .stream()
-                .map(GameMetConsoles::new)
+                .map(GameBeknopt::new)
                 .toList();
     }
 
@@ -55,20 +55,22 @@ class GameController {
     }
 
     @GetMapping("genre/{genre}")
-    List<GameMetConsoles> findByGenre(@PathVariable Genre genre) {
+    List<GameBeknopt> findByGenre(@PathVariable Genre genre) {
         return gameService.findGamesByGenre(genre)
-                .stream()
-                .map(GameMetConsoles::new)
-                .toList();
-    }
-
-    @GetMapping("/opConsole/{consoleId}")
-    List<GameBeknopt> findByConsoleId(@PathVariable long consoleId) {
-        return gameService.findByConsoleId(consoleId)
                 .stream()
                 .map(GameBeknopt::new)
                 .toList();
     }
+
+    //overbodige method:
+
+//    @GetMapping("/opConsole/{consoleId}")
+//    List<GameBeknopt> findByConsoleId(@PathVariable long consoleId) {
+//        return gameService.findByConsoleId(consoleId)
+//                .stream()
+//                .map(GameBeknopt::new)
+//                .toList();
+//    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
