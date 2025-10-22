@@ -52,8 +52,6 @@ class GameService {
         return gameRepository.findByConsolesId(consoleId);
     }
 
-    //...
-
     @Transactional
     Game create(NieuweGame nieuweGame) {
         if (gameRepository.existsByTitle(nieuweGame.title())) {
@@ -84,6 +82,7 @@ class GameService {
         gameRepository.deleteById(id);
     }
 
+    //kan in principe efficiënter door eerst de update te doen, maar ik wil specifieke exceptions kunnen tonen:
     @Transactional
     public void addConsoleToGame(long gameId, long consoleId) {
         Game game = gameRepository.findById(gameId)

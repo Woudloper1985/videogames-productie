@@ -1,5 +1,6 @@
 package be.vdab.videogames.consoles;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,19 +29,22 @@ class ConsoleService {
 
     @Transactional
     Console create(NieuweConsole nieuweConsole) {
-        if (consoleRepository.existsByName(nieuweConsole.name())) {
-            throw new ConsoleBestaatAlException();
-        } // ok bij slechts één admin; geen race conditions.
-        int huidigJaar = Year.now().getValue(); // haalt het huidige jaar op.
+        int huidigJaar = Year.now().getValue();
         if (nieuweConsole.releaseYear() > huidigJaar) {
-            throw new ReleaseJaarInToekomstException();
+            throw new ReleaseJaarInToekomstException(); // 400 Bad Request
         }
-        Console console = new Console(
-                nieuweConsole.name(),
-                nieuweConsole.manufacturer(),
-                nieuweConsole.releaseYear()
-        );
-        return consoleRepository.save(console);
+
+        try {
+            Console console = new Console(
+                    nieuweConsole.name(),
+                    nieuweConsole.manufacturer(),
+                    nieuweConsole.releaseYear()
+            );
+            return consoleRepository.save(console);
+        } catch (DataIntegrityViolationException e) {
+            // Unieke constraint violation → console bestaat al
+            throw new ConsoleBestaatAlException(); // 409 Conflict
+        }
     }
 
     @Transactional
