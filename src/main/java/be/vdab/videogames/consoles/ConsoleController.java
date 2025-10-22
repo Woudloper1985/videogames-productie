@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("consoles")
+@CrossOrigin
 class ConsoleController {
     private final ConsoleService consoleService;
     private final GameService gameService;
@@ -48,6 +49,8 @@ class ConsoleController {
         } catch (EmptyResultDataAccessException ignored) {
         }
     }
+
+    // nog op te nemen in de frontend, is trickier:
 
     @PutMapping("{consoleId}/addGame/{gameId}")
     void addGameToConsole(@PathVariable long consoleId, @PathVariable long gameId) {

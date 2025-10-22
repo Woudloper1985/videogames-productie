@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 record ConsoleMetGames(
+        long id,
         String name,
         String manufacturer,
         int releaseYear,
@@ -14,6 +15,7 @@ record ConsoleMetGames(
 
     ConsoleMetGames(Console console) {
         this(
+                console.getId(),
                 console.getName(),
                 console.getManufacturer(),
                 console.getReleaseYear(),

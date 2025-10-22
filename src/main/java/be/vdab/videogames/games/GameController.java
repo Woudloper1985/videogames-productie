@@ -11,6 +11,7 @@ import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("games")
+@CrossOrigin
 class GameController {
     private final GameService gameService;
 
@@ -83,6 +84,8 @@ class GameController {
         }
         gameService.delete(id);
     }
+
+    // nog op te nemen in de frontend, is trickier:
 
     @PutMapping("{gameId}/addConsole/{consoleId}")
     void addConsoleToGame(@PathVariable long gameId, @PathVariable long consoleId) {
