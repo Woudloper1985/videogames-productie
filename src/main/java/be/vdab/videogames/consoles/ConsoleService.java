@@ -1,5 +1,6 @@
 package be.vdab.videogames.consoles;
 
+import be.vdab.videogames.games.GameService;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -47,11 +48,36 @@ class ConsoleService {
         }
     }
 
-    @Transactional
-    void delete(Long id) {
-        consoleRepository.deleteById(id);
-    }
+//    @Transactional
+//    void delete(Long id) {
+//        var console = consoleRepository.findById(id)
+//                .orElseThrow(ConsoleNietGevondenException::new);
+//        console.getGames().forEach(game -> game.removeConsole(console));
+//        consoleRepository.deleteById(id);
+//    }
 
     //wijzigingslogica kan eventueel later nog --> dan moet optimistic locking samen met een versie-kolom etc.
-    //kan ik misschien in deze beperkte scope houden op: delete en dan nieuw maken.
+    // maar optimistic locking is niet strikt nodig voor één gebruiker...
+    // kan ik misschien in deze beperkte scope houden op: delete en dan nieuw maken.
+
+    @Transactional
+    public void updateName(long id, String name) {
+        var console = consoleRepository.findById(id)
+                .orElseThrow(ConsoleNietGevondenException::new);
+        console.setName(name);
+    }
+
+    @Transactional
+    public void updateManufacturer(long id, String manufacturer) {
+        var console = consoleRepository.findById(id)
+                .orElseThrow(ConsoleNietGevondenException::new);
+        console.setManufacturer(manufacturer);
+    }
+
+    @Transactional
+    public void updateReleaseYear(long id, int year) {
+        var console = consoleRepository.findById(id)
+                .orElseThrow(ConsoleNietGevondenException::new);
+        console.setReleaseYear(year);
+    }
 }

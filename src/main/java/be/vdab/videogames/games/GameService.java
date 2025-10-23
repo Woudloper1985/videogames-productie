@@ -100,7 +100,4 @@ class GameService {
                 .orElseThrow(ConsoleNietGevondenException::new);
         game.removeConsole(console);
     }
-
-    //wijzigingslogica kan eventueel later nog --> dan moet optimistic locking samen met een versie-kolom etc.
-    //kan ik misschien in deze beperkte scope houden op: delete en dan nieuw maken.
 }

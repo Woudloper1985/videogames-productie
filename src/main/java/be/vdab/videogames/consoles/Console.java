@@ -48,6 +48,18 @@ public class Console {
         return releaseYear;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setManufacturer(String manufacturer) {
+        this.manufacturer = manufacturer;
+    }
+
+    public void setReleaseYear(int releaseYear) {
+        this.releaseYear = releaseYear;
+    }
+
     public Set<Game> getGames() {
         return Collections.unmodifiableSet(games);
     }
