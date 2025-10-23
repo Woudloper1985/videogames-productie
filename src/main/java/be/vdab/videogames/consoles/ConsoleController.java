@@ -2,7 +2,6 @@ package be.vdab.videogames.consoles;
 
 import be.vdab.videogames.games.GameService;
 import jakarta.validation.Valid;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,12 +41,30 @@ class ConsoleController {
         return consoleService.create(nieuweConsole);
     }
 
-    @DeleteMapping("{id}")
-    void delete(@PathVariable long id) {
-        try {
-            consoleService.delete(id);
-        } catch (EmptyResultDataAccessException ignored) {
-        }
+    //onnodige functie - consoles zijn puur informatief, de games zijn fysieke entiteiten
+//    @DeleteMapping("{id}")
+//    void delete(@PathVariable long id) {
+//        try {
+//            consoleService.delete(id);
+//        } catch (EmptyResultDataAccessException ignored) {
+//        }
+//    }
+
+    //wijzigingslogica --> zie de service layer.
+
+    @PutMapping("{id}/name")
+    void updateName(@PathVariable long id, @RequestParam String name) {
+        consoleService.updateName(id, name);
+    }
+
+    @PutMapping("{id}/manufacturer")
+    void updateManufacturer(@PathVariable long id, @RequestParam String manufacturer) {
+        consoleService.updateManufacturer(id, manufacturer);
+    }
+
+    @PutMapping("{id}/releaseYear")
+    void updateReleaseYear(@PathVariable long id, @RequestParam int year) {
+        consoleService.updateReleaseYear(id, year);
     }
 
     // nog op te nemen in de frontend, is trickier:
