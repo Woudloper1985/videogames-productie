@@ -19,8 +19,8 @@ interface GameRepository extends JpaRepository<Game, Long> {
     @EntityGraph(attributePaths = "consoles")
     List<Game> findByGenre(Genre genre, Sort by);
 
-    //@EntityGraph(attributePaths = "consoles") - niet nodig: DTO zonder consoles wordt teruggegeven.
-    List<Game> findByConsolesId(Long consoleId);
+//    //@EntityGraph(attributePaths = "consoles") - niet nodig: DTO zonder consoles wordt teruggegeven.
+//    List<Game> findByConsolesId(Long consoleId);
 
     boolean existsByTitle(String title);
 }
