@@ -32,7 +32,6 @@ class GameService {
         return gameRepository.findAll(Sort.by("title"));
     }
 
-    //moet misschien met optional en dan in de controller exception?
     Optional<Game> findById(Long id) {
         return gameRepository.findById(id);
     }
@@ -46,11 +45,11 @@ class GameService {
         return gameRepository.findByGenre(genre, Sort.by(Sort.Order.by("title").ignoreCase()));
     }
 
-    List<Game> findByConsoleId(long consoleId) {
-//        consoleRepository.findById(consoleId)
-//                .orElseThrow(ConsoleNietGevondenException::new); ZAL ALLICHT NIET NODIG ZIJN, WANT FRONTEND ZAL EERST FindById doen uit ConsoleController.
-        return gameRepository.findByConsolesId(consoleId);
-    }
+//    List<Game> findByConsoleId(long consoleId) {
+////        consoleRepository.findById(consoleId)
+////                .orElseThrow(ConsoleNietGevondenException::new); ZAL ALLICHT NIET NODIG ZIJN, WANT FRONTEND ZAL EERST FindById doen uit ConsoleController.
+//        return gameRepository.findByConsolesId(consoleId);
+//    }
 
     @Transactional
     Game create(NieuweGame nieuweGame) {
