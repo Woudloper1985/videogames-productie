@@ -67,7 +67,7 @@ class ConsoleController {
         consoleService.updateReleaseYear(id, year);
     }
 
-    // nog op te nemen in de frontend, is trickier:
+    // zelfde methods voor game.js en console.js:
 
     @PutMapping("{consoleId}/addGame/{gameId}")
     void addGameToConsole(@PathVariable long consoleId, @PathVariable long gameId) {

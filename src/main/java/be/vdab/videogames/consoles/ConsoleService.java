@@ -1,6 +1,5 @@
 package be.vdab.videogames.consoles;
 
-import be.vdab.videogames.games.GameService;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -32,7 +31,7 @@ class ConsoleService {
     Console create(NieuweConsole nieuweConsole) {
         int huidigJaar = Year.now().getValue();
         if (nieuweConsole.releaseYear() > huidigJaar) {
-            throw new ReleaseJaarInToekomstException(); // 400 Bad Request
+            throw new ReleaseInToekomstException(); // 400 Bad Request
         }
 
         try {
