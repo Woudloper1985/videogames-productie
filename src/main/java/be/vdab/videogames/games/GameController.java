@@ -87,7 +87,7 @@ class GameController {
         gameService.delete(id);
     }
 
-    // nog op te nemen in de frontend, is trickier:
+    // mag weg, is identieke method voor game.js en console.js
 
     @PutMapping("{gameId}/addConsole/{consoleId}")
     void addConsoleToGame(@PathVariable long gameId, @PathVariable long consoleId) {

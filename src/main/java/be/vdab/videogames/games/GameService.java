@@ -3,10 +3,14 @@ package be.vdab.videogames.games;
 import be.vdab.videogames.consoles.Console;
 import be.vdab.videogames.consoles.ConsoleNietGevondenException;
 import be.vdab.videogames.consoles.ConsoleRepository;
+import be.vdab.videogames.consoles.ReleaseInToekomstException;
+import org.springframework.cglib.core.Local;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.Year;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -53,8 +57,12 @@ class GameService {
 
     @Transactional
     Game create(NieuweGame nieuweGame) {
+        LocalDate vandaag = LocalDate.now();
+        if (nieuweGame.releaseDate().isAfter(vandaag)) {
+            throw new ReleaseInToekomstException(); // 400 Bad Request
+        }
         if (gameRepository.existsByTitle(nieuweGame.title())) {
-            throw new GameBestaatAlException();
+            throw new GameBestaatAlException(); // 409 Conflict
         } // ok bij slechts één admin; geen race conditions.
 
         // Alle consoles in één query ophalen
