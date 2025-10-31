@@ -61,7 +61,7 @@ public class Console {
 //    }
 
     public Set<Game> getGames() {
-        return games; // modifiable, om console te kunnen verwijderen.
+        return Collections.unmodifiableSet(games); // modifiable maken om console te kunnen verwijderen.
     }
 
     public void addGame(Game game) {
