@@ -43,13 +43,13 @@ class ConsoleController {
     }
 
    // onnodige functie - consoles zijn puur informatief, de games zijn fysieke entiteiten
-   @DeleteMapping("{id}")
-   void delete(@PathVariable long id) {
-       try {
-           consoleService.delete(id);
-       } catch (EmptyResultDataAccessException ignored) {
-       }
-   }
+//   @DeleteMapping("{id}")
+//   void delete(@PathVariable long id) {
+//       try {
+//           consoleService.delete(id);
+//       } catch (EmptyResultDataAccessException ignored) {
+//       }
+//   }
 
 
     //wijzigingslogica --> zie de service layer.

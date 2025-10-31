@@ -57,18 +57,18 @@ class ConsoleService {
 //        consoleRepository.deleteById(id);
 //    }
 
-    @Transactional
-    public void delete(Long id) {
-        Console console = consoleRepository.findById(id)
-                .orElseThrow(ConsoleNietGevondenException::new);
-
-        // koppelingen met games losmaken
-        for (Game game : console.getGames()) {
-            game.getConsoles().remove(console);
-        }
-        console.getGames().clear();
-        consoleRepository.delete(console);
-    }
+//    @Transactional
+//    public void delete(Long id) {
+//        Console console = consoleRepository.findById(id)
+//                .orElseThrow(ConsoleNietGevondenException::new);
+//
+//        // koppelingen met games losmaken
+//        for (Game game : console.getGames()) {
+//            game.getConsoles().remove(console);
+//        }
+//        console.getGames().clear();
+//        consoleRepository.delete(console);
+//    }
 
 
     //wijzigingslogica kan eventueel later nog --> dan moet optimistic locking samen met een versie-kolom etc.
