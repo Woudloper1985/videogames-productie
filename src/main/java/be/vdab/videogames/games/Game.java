@@ -61,8 +61,13 @@ public class Game {
         return genre;
     }
 
+//    public Set<Console> getConsoles() {
+//        return Collections.unmodifiableSet(consoles);
+//    }
+
     public Set<Console> getConsoles() {
-        return Collections.unmodifiableSet(consoles);
+        return consoles; // modifiable nodig om console te kunnen verwijderen.
+        // is misschien betere manier voor te vinden? Zie mail aan mezelf in TO DO.
     }
 
     public void addConsole(Console console) {

@@ -84,7 +84,6 @@ class GameController {
             gameService.delete(id);
         } catch (EmptyResultDataAccessException ignored) {
         }
-        gameService.delete(id);
     }
 
     // mag weg, is identieke method voor game.js en console.js
