@@ -1,8 +1,10 @@
 package be.vdab.videogames.consoles;
 
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ClassPathResource;
@@ -10,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.test.web.servlet.assertj.MockMvcTester;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,7 +28,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @AutoConfigureMockMvc
 class ConsoleControllerTest {
 
-    //private final static String CONSOLES_TABLE = "consoles";
     private final MockMvcTester mockMvcTester;
     private final JdbcClient jdbcClient;
 
@@ -36,7 +38,7 @@ class ConsoleControllerTest {
 
     @Test
     void findByIdMetBestaandeIdVindtJuisteConsoleMetJuisteGames() {
-        var id = idVanTest1Console();
+        var id = idVanTestConsole1();
         var response = mockMvcTester.get()
                 .uri("/consoles/{id}", id);
         assertThat(response)
@@ -57,7 +59,7 @@ class ConsoleControllerTest {
 
     @Test
     void findByIdConsoleZonderGamesGeeftLegeGamesArray() {
-        var id = idVanTest2Console();
+        var id = idVanTestConsole2();
         var response = mockMvcTester.get()
                 .uri("/consoles/{id}", id);
         assertThat(response)
@@ -106,21 +108,72 @@ class ConsoleControllerTest {
         assertThat(response).hasStatus(HttpStatus.BAD_REQUEST);
     }
 
+    @Autowired
+    private EntityManager entityManager; // nodig hieronder, om na de PUT de staat van de DB te flushen naar de DB zelf.
+
+    @Test
+    void addGameHappyFlow() throws InterruptedException {
+        var gameId = idVanTestGame3();
+        var consoleId = idVanTestConsole2();
+
+        var response = mockMvcTester.put()
+                .uri("/consoles/{consoleId}/addGame/{gameId}", consoleId, gameId);
+
+        assertThat(response).hasStatusOk();
+        entityManager.flush();
+
+        // Controleer dat er een record in de tussentabel is bijgekomen:
+        var count = JdbcTestUtils.countRowsInTableWhere(jdbcClient, "consolesgames",
+                "gameId=" + gameId + " and consoleId=" + consoleId);
+        assertThat(count).isEqualTo(1);
+    }
+
+    @Test
+    void removeGameHappyFlow() {
+        var gameId = idVanTestGame2();
+        var consoleId = idVanTestConsole3();
+
+        var response = mockMvcTester.delete()
+                .uri("/consoles/{consoleId}/removeGame/{gameId}", consoleId, gameId);
+
+        assertThat(response).hasStatusOk();
+        entityManager.flush();
+
+        // Controleer dat het record uit de tussentabel verdwenen is:
+        var count = JdbcTestUtils.countRowsInTableWhere(jdbcClient, "consolesgames",
+                "gameId=" + gameId + " and consoleId=" + consoleId);
+        assertThat(count).isZero();
+    }
+
     //HELPERS:
 
-    private int idVanTest1Console() { //console met 2 games
-        return jdbcClient.sql("select id from consoles where name = 'TestConsole 1'")
-                .query(Integer.class)
+    private long idVanTestGame2() {
+        return jdbcClient.sql("select id from games where title = 'TestGame 2'")
+                .query(Long.class)
                 .single();
     }
 
-    private int idVanTest2Console() { //console zonder games
+    private long idVanTestGame3() {
+        return jdbcClient.sql("select id from games where title = 'TestGame 3'")
+                .query(Long.class)
+                .single();
+    }
+
+    private long idVanTestConsole1() { //console met 2 games
+        return jdbcClient.sql("select id from consoles where name = 'TestConsole 1'")
+                .query(Long.class)
+                .single();
+    }
+
+    private long idVanTestConsole2() { //console zonder games
         return jdbcClient.sql("select id from consoles where name = 'TestConsole 2'")
-                .query(Integer.class)
+                .query(Long.class)
+                .single();
+    }
+
+    private long idVanTestConsole3() {
+        return jdbcClient.sql("select id from consoles where name = 'TestConsole 3'")
+                .query(Long.class)
                 .single();
     }
 }
-
-// worden getest in GameController, want zelfde methods daar:
-//addGameToConsole()
-//removeGameFromConsole()

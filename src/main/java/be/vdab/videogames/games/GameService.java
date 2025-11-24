@@ -1,24 +1,20 @@
 package be.vdab.videogames.games;
 
-import be.vdab.videogames.consoles.Console;
 import be.vdab.videogames.consoles.ConsoleNietGevondenException;
 import be.vdab.videogames.consoles.ConsoleRepository;
 import be.vdab.videogames.consoles.ReleaseInToekomstException;
-import org.springframework.cglib.core.Local;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.Year;
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
-public//vergeet niet @Transactional te typen voor CUD methods.
-class GameService {
+public class GameService {
     private final GameRepository gameRepository;
     private final ConsoleRepository consoleRepository;
 
@@ -31,7 +27,7 @@ class GameService {
         return gameRepository.count();
     }
 
-    //voor overzichtslijst in frontend.
+    //voor overzichtslijst in frontend:
     List<Game> findAll() {
         return gameRepository.findAll(Sort.by("title"));
     }
@@ -40,7 +36,7 @@ class GameService {
         return gameRepository.findById(id);
     }
 
-    //voor zoekbalk in frontend.
+    //voor zoekbalk in frontend:
     List<Game> findByTitleContainingIgnoreCase(String title) {
         return gameRepository.findByTitleContainingIgnoreCase(title, Sort.by(Sort.Order.by("title").ignoreCase()));
     }
@@ -48,12 +44,6 @@ class GameService {
     List<Game> findGamesByGenre(Genre genre) {
         return gameRepository.findByGenre(genre, Sort.by(Sort.Order.by("title").ignoreCase()));
     }
-
-//    List<Game> findByConsoleId(long consoleId) {
-////        consoleRepository.findById(consoleId)
-////                .orElseThrow(ConsoleNietGevondenException::new); ZAL ALLICHT NIET NODIG ZIJN, WANT FRONTEND ZAL EERST FindById doen uit ConsoleController.
-//        return gameRepository.findByConsolesId(consoleId);
-//    }
 
     @Transactional
     Game create(NieuweGame nieuweGame) {
@@ -65,14 +55,14 @@ class GameService {
             throw new GameBestaatAlException(); // 409 Conflict
         } // ok bij slechts één admin; geen race conditions.
 
-        // Alle consoles in één query ophalen
+        // Alle consoles in één query ophalen:
         var consoles = new LinkedHashSet<>(consoleRepository.findAllById(nieuweGame.consoleIds()));
 
-        // Controleer of alle IDs bestaan
+        // Controleer of alle IDs bestaan:
         if (consoles.size() != nieuweGame.consoleIds().size()) {
             throw new ConsoleNietGevondenException();
         }
-        // Game entity aanmaken
+        // Game entity aanmaken:
         Game game = new Game(
                 nieuweGame.title(),
                 nieuweGame.developer(),
@@ -80,7 +70,7 @@ class GameService {
                 nieuweGame.genre(),
                 consoles
         );
-        // Opslaan in DB
+        // Opslaan in DB:
         return gameRepository.save(game);
     }
 
@@ -91,7 +81,7 @@ class GameService {
 
     //kan in principe efficiënter door eerst de update te doen, maar ik wil specifieke exceptions kunnen tonen:
     @Transactional
-    public void addConsoleToGame(long gameId, long consoleId) {
+    public void addGameToConsole(long consoleId, long gameId) {
         Game game = gameRepository.findById(gameId)
                 .orElseThrow(GameNietGevondenException::new);
         var console = consoleRepository.findById(consoleId)
@@ -100,7 +90,7 @@ class GameService {
     }
 
     @Transactional
-    public void removeConsoleFromGame(long gameId, long consoleId) {
+    public void removeGameFromConsole(long consoleId, long gameId) {
         Game game = gameRepository.findById(gameId)
                 .orElseThrow(GameNietGevondenException::new);
         var console = consoleRepository.findById(consoleId)

@@ -24,8 +24,6 @@ class GameController {
         return gameService.findAantal();
     }
 
-    //kan eventueel ook nog een findAantalByGenre(Genre genre) gemaakt worden.
-
     @GetMapping
     Stream<GameBeknopt> findAll() {
         return gameService.findAll()
@@ -40,7 +38,6 @@ class GameController {
                 .orElseThrow(GameNietGevondenException::new);
     }
 
-    // lege invoer (400) in frontend afvangen, evenals niets gevonden (200 met lege lijst)
     @GetMapping(params = "title")
     List<GameBeknopt> findByTitleContainingIgnoreCase(@NotBlank String title) {
         return gameService.findByTitleContainingIgnoreCase(title)
@@ -62,16 +59,6 @@ class GameController {
                 .toList();
     }
 
-    //overbodige method:
-
-//    @GetMapping("/opConsole/{consoleId}")
-//    List<GameBeknopt> findByConsoleId(@PathVariable long consoleId) {
-//        return gameService.findByConsoleId(consoleId)
-//                .stream()
-//                .map(GameBeknopt::new)
-//                .toList();
-//    }
-
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     Game create(@RequestBody @Valid NieuweGame nieuweGame) {
@@ -84,17 +71,5 @@ class GameController {
             gameService.delete(id);
         } catch (EmptyResultDataAccessException ignored) {
         }
-    }
-
-    // mag weg, is identieke method voor game.js en console.js
-
-    @PutMapping("{gameId}/addConsole/{consoleId}")
-    void addConsoleToGame(@PathVariable long gameId, @PathVariable long consoleId) {
-        gameService.addConsoleToGame(gameId, consoleId);
-    }
-
-    @DeleteMapping("{gameId}/removeConsole/{consoleId}")
-    void removeConsoleFromGame(@PathVariable long gameId, @PathVariable long consoleId) {
-        gameService.removeConsoleFromGame(gameId, consoleId);
     }
 }
