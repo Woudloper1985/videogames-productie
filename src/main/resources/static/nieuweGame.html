@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Game toevoegen</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" href="images/game.ico">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="js/project/nieuweGame.js" type="module"></script>
+</head>
+<body class="bg-warning-subtle" style="min-height: 100vh;">
+<div class="container text-center py-5">
+
+    <!-- Terug-knop -->
+    <div class="d-flex gap-5 mb-4">
+        <a href="games.html" class="btn btn-outline-info d-flex align-items-center">
+            <img src="images/back.ico" alt="back" style="width:32px; height:32px; margin-right:0.5rem;">
+            Kerekewere
+        </a>
+    </div>
+
+    <h1 class="mb-4 text-primary">Game toevoegen</h1>
+
+    <form id="toevoegForm" class="d-flex flex-column align-items-center gap-3">
+
+        <!-- Titel -->
+        <div class="w-50">
+            <label for="titel" class="form-label">Titel:</label>
+            <input type="text" id="titel" class="form-control" required autofocus>
+            <div id="titelFout" class="form-text text-danger" hidden>Verplicht</div>
+        </div>
+
+        <!-- Developer -->
+        <div class="w-50">
+            <label for="developer" class="form-label">Developer:</label>
+            <input type="text" id="developer" class="form-control" required>
+            <div id="developerFout" class="form-text text-danger" hidden>Verplicht</div>
+        </div>
+
+        <!-- Releasedatum -->
+        <div class="w-50">
+            <label for="releasedatum" class="form-label">Release datum:</label>
+            <input type="date" id="releasedatum" class="form-control" required min="1970-01-01" max="">
+            <div id="releasedatumFout" class="form-text text-danger" hidden>
+                Tussen 01/01/1970 en vandaag
+            </div>
+        </div>
+
+        <!-- Genre -->
+        <div class="w-50">
+            <label for="genre" class="form-label">Genre:</label>
+            <select id="genre" class="form-select" required>
+                <option value="" selected disabled>Kies genre</option>
+                <!-- Opties via JS vullen -->
+            </select>
+            <div id="genreFout" class="form-text text-danger" hidden>Verplicht</div>
+        </div>
+
+        <!-- Consoles (checkboxes) -->
+        <div class="w-50 text-start">
+            <label class="form-label">Consoles:</label>
+            <div id="consolesContainer">
+                <!-- JS vult hier checkboxes -->
+            </div>
+            <div id="consolesFout" class="form-text text-danger" hidden>
+                Minstens één console selecteren
+            </div>
+        </div>
+
+        <button type="submit" id="toevoegen" class="btn btn-primary mt-3">Toevoegen</button>
+
+        <div id="gameBestaatAlFout" class="form-text text-danger" hidden>
+            Game bestaat al
+        </div>
+        <div id="consoleNietGevondenFout" class="form-text text-danger" hidden>
+            Console niet gevonden <!-- kan normaal gezien niet optreden -->
+        </div>
+    </form>
+
+    <div id="storing" class="text-bg-danger" hidden>STORING</div>
+
+</div>
+</body>
+</html>
