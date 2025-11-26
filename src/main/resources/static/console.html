@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Console detail</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" href="images/console.ico">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="js/project/console.js" type="module"></script>
+</head>
+<body class="bg-warning-subtle" style="min-height: 100vh;">
+<div class="container py-5">
+
+<!-- Knoppen bovenaan -->
+    <div class="d-flex gap-5 mb-4">
+        <a href="consoles.html" class="btn btn-outline-info d-flex align-items-center">
+            <img src="images/back.ico" alt="back" style="width:32px; height:32px; margin-right:0.5rem;">
+            Kerekewere
+        </a>
+    </div>
+
+    <!-- Console info -->
+    <h2 id="consoleNaam" class="text-success"></h2>
+    <p id="consoleInfo"></p>
+
+    <!-- Games tabel -->
+    <table class="table table-primary table-striped table-bordered mt-4">
+        <thead class="table-dark">
+        <tr>
+            <th scope="col">Titel</th>
+            <th scope="col">Developer</th>
+            <th scope="col">Release</th>
+            <th scope="col">Genre</th>
+            <th scope="col" class="text-center text-bg-warning">Game niet meer op deze console?</th>
+        </tr>
+        </thead>
+        <tbody id="gamesBody">
+        <!-- Rijen worden door JS toegevoegd -->
+        </tbody>
+    </table>
+
+    <div id="storing" class="text-bg-danger" hidden></div>
+
+</div>
+</body>
+</html>

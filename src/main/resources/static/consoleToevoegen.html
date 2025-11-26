@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Console toevoegen aan game</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" href="images/console.ico">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="js/project/consoleToevoegen.js" type="module"></script>
+</head>
+<body class="bg-warning-subtle" style="min-height: 100vh;">
+<div class="container py-5">
+
+    <!-- Terug-knop -->
+    <div class="mb-4">
+        <a href="#" id="terugKnop" class="btn btn-outline-info d-flex align-items-center">
+            <img src="images/back.ico" alt="back" style="width:32px; height:32px; margin-right:0.5rem;">
+            Kerekewere
+        </a>
+    </div>
+
+    <!-- Game info -->
+    <div id="itemInfo" class="mb-4">
+        <h2 id="itemTitel" class="text-success"></h2>
+        <p id="itemDetails"></p>
+    </div>
+
+    <!-- Radio buttons container -->
+    <div class="mb-4 w-50" id="selectDoel">
+        <label class="form-label">Selecteer een console:</label>
+        <!-- JS vult hier radio buttons -->
+    </div>
+
+    <!-- Toevoegen knop -->
+    <button id="toevoegenBtn" class="btn btn-success">Toevoegen</button>
+
+    <!-- Foutmelding -->
+    <div id="storing" class="text-bg-danger mt-3 p-2" hidden></div>
+
+</div>
+</body>
+</html>
